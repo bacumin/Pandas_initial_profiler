@@ -6,13 +6,13 @@ Created on Wed Jun 14 08:53:04 2017
 """
 
 def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True, 
-                   nan_count=True, unique_count=True, top_x=0, sorter=False, 
+                   nan_count=True, unique_count=True, top_x=0, vc_nonan=False, sorter=False, 
                    file_save=False, hist=0, explanatory_dict=None):
     '''
     This function profiles each column in a dataframe, and prints formatted results
     to the screen.
     
-    Returns: nothing.
+    Returns: nothing. Prints a profile of each column in a pandas df.
     
     Parameters:
         - df: pandas df to profile
@@ -27,6 +27,8 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
             as a bar graph
         - unique_count: if true, returns proportion unique vals as bar graph
         - top_x : if >0, prints top x values of a feature.
+        - vc_nonan : if true, prints the proportion of column (excluding nans)
+            that have this value next to the bar graph. Has no effect if top_x=0
         - sorter: if true and top_x>0, returns not the top x highest values but the
             first x alphabetically/numerically sorted values
         - file_save: if true, saves "dtype_output.txt" which pipes output
@@ -460,19 +462,29 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
         #print top x values
         if(top_x>0):
             print('VALUE COUNTS :', "\n","_"*40)
+            
             if sorter==False:
                 v_c=df[col].value_counts()
             else:
                 v_c=df[col].values_counts(ascending=True)
+                
+            if(vc_nonan):
+                nonan_count=len(df)-sum(df[col].isnull())
+                
             for k in range(0,top_x):
                 try:
+                    if(vc_nonan):
+                        propor_nonan=round(v_c[v_c.index[k]]/nonan_count,4)
+                    else:
+                        propor_nonan=''
                     print( "|",v_c.index[k],":", (30-len(str(v_c.index[k])))*" ",
                           barchartline.bar_chart_line(value=v_c[v_c.index[k]], 
-                                                      maximum=len(df)))
+                                                      maximum=len(df))
+                          , " |", propor_nonan)
                 
-                #if top_x is overshooting
+                #if top_x is overshooting - top_x=3 but 2 unique values
                 except IndexError:
-                    pass
+                    break
             print("|" + "_"*40)
             
         
@@ -515,4 +527,4 @@ if __name__=='__main__':
   df['c'].iloc[1]=1.6
   df['c'].iloc[5]=np.nan
   print(df)
-  dtype_profiler(df, hist=2)
+  dtype_profiler(df, hist=2, top_x=3, vc_nonan=True)
