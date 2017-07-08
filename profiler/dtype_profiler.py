@@ -436,7 +436,7 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
         
         #variable types breakdown
         if((profile[0] in ['object', 'float64']) and (rec_types)):
-            print('DTYPES:',"\n", "_"*50)
+            print('DTYPES:')
             dic=record_profiler(df[col])
             weights=distribute_weights(dic.values())
             spacer=0
@@ -450,18 +450,18 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
             
             for key, value in dic.items():
                 if value > 0:
-                    print("|", key,(16-len(key)+spacer)*" " +
+                    print(" ", key,(16-len(key)+spacer)*" " +
                          char_dt[key]*weights[value] + 
                          "."*(30-weights[value]-spacer) +
-                         " "*2+"|")
+                         " "*2)
                     spacer+=weights[value]
                     
-            print("|" + "_"*50 + "|", "\n")
+            print()
         
         
         #print top x values
         if(top_x>0):
-            print('VALUE COUNTS :', "\n","_"*40)
+            print('VALUE COUNTS :')
             
             if sorter==False:
                 v_c=df[col].value_counts()
@@ -477,7 +477,7 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
                         propor_nonan=round(v_c[v_c.index[k]]/nonan_count,4)
                     else:
                         propor_nonan=''
-                    print( "|",v_c.index[k],":", (30-len(str(v_c.index[k])))*" ",
+                    print(v_c.index[k],":", (30-len(str(v_c.index[k])))*" ",
                           barchartline.bar_chart_line(value=v_c[v_c.index[k]], 
                                                       maximum=len(df))
                           , " |", propor_nonan)
@@ -485,8 +485,7 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
                 #if top_x is overshooting - top_x=3 but 2 unique values
                 except IndexError:
                     break
-            print("|" + "_"*40)
-            
+            print()
         
         #histogram
         if(hist>0 and profile[0] in ['float64', 'int64']):
