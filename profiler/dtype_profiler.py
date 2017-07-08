@@ -35,8 +35,8 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
     
     #THIS ASSUMES YOU COPY THE PDTOOLS DIRECTORY INTO THE FOLDER WHERE YOU ARE RUNNING THE PROGRAM
     
-    from pdtools import barchartline
-    #import barchartline
+    #from pdtools import barchartline
+    import barchartline
     import pandas as pd
     import numpy as np
     import math 
@@ -417,8 +417,11 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
         
         
         #basic types
-        print("BASICS: numpy dtype: ", profile[0], (10-len(profile[0]))*" ",
-              "| dtype: ", profile[1], (18-len(profile[1]))*' ', "| flag: ", nanflag, "\n")
+        print("BASICS: numpy dtype: ", profile[0], (8-len(profile[0]))*" ",
+              "| dtype: ", profile[1], (12-len(profile[1]))*' ', 
+              "| flag: ", nanflag, ' '*(8-len(nanflag)),
+              "| non null: ", len(df)-sum(df[col].isnull()) ,
+                                  "\n")
         
         #unique proportion
         if(unique_count):
@@ -427,6 +430,7 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
         #nan proportion
         if((nan_count) & (nanflag=='HAS NAN')):
             print("NAN COUNT: "," "*6, barchartline.bar_chart_line(sum(df[col].isnull()), len(df)))
+        
         
         #variable types breakdown
         if((profile[0] in ['object', 'float64']) and (rec_types)):
