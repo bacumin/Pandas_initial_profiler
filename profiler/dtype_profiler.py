@@ -474,11 +474,11 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
             for k in range(0,top_x):
                 try:
                     if(vc_nonan):
-                        propor_nonan=round(v_c[v_c.index[k]]/nonan_count,4)
+                        propor_nonan=round(v_c[str(v_c.index[k])]/nonan_count,4)
                     else:
                         propor_nonan=''
                     print(v_c.index[k],":", (30-len(str(v_c.index[k])))*" ",
-                          barchartline.bar_chart_line(value=v_c[v_c.index[k]], 
+                          barchartline.bar_chart_line(value=v_c.loc[v_c.index[k]], 
                                                       maximum=len(df))
                           , " |", propor_nonan)
                 
