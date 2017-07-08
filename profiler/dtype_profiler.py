@@ -37,7 +37,7 @@ def dtype_profiler(df, subset=None, check_nan=True, cols=[], rec_types=True,
     
     #THIS ASSUMES YOU COPY THE PDTOOLS DIRECTORY INTO THE FOLDER WHERE YOU ARE RUNNING THE PROGRAM
     
-    from pdtools import barchartline
+    from Pandas_initial_profiler.profiler import barchartline
     #import barchartline
     import pandas as pd
     import numpy as np
